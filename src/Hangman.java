@@ -113,8 +113,29 @@ public class Hangman {
         for(int i=0;i<cityToGuess.length;i++){
             System.out.print(cityToGuess[i]+" ");
         }
-        System.out.print("*** YOU WIN ***");
-        System.out.print(city+" is the correct answer!");
+        System.out.println("\n\t\t*** YOU WIN *** ");
+        System.out.println(city+" is the correct answer!");
+        System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
+        Scanner sc = new Scanner(System.in);
+        if(sc.nextInt()==1){
+            playHangMan();
+        } else {
+            System.out.println("Goodbye!");
+        }
+    }
+    public static void gameForTwoWin(String[] cityToGuess, String city, String winner){
+        for(int i=0;i<cityToGuess.length;i++){
+            System.out.print(cityToGuess[i]+" ");
+        }
+        System.out.println("\n\t\t*** "+winner+" WON *** ");
+        System.out.println(city+" is the correct answer!");
+        System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
+        Scanner sc = new Scanner(System.in);
+        if(sc.nextInt()==1){
+            playHangMan();
+        } else {
+            System.out.println("Goodbye!");
+        }
     }
 
     public static void startSinglePlayer() {
@@ -123,14 +144,14 @@ public class Hangman {
         Scanner sc = new Scanner(System.in);
         String[] cityList = {"BLAGOEVGRAD", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO", "DOBRICH", "LOVECH", "MONTANA", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV", "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
         Random rnd = new Random();
-        int cityIndex = rnd.nextInt(cityList.length) + 1;
+        int cityIndex = rnd.nextInt(cityList.length);
         String city = cityList[cityIndex];
         String[] letters = city.split("(?!^)");
         String[] cityToGuess = new String[city.length()];
         printCurrentHangman(score,wrongTries);
         System.out.println("\nGuess the city!");
         for (int i = 0; i < cityToGuess.length; i++) {
-            if (letters[i] == " ") {
+            if (letters[i].equals(" ")) {
                 cityToGuess[i] = " ";
             } else {
                 cityToGuess[i] = "_";
@@ -163,9 +184,64 @@ public class Hangman {
         gameWin(cityToGuess, city);}
     }
 
-    public static void startMultiplayer() {
-        String[] cityList = {"BLAGOEVGRAD", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO", "DOBRICH", "LOVECH", "MONTANA", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV", "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
+    public static String setPlayerNames(int num){
+        if(num==1){
+        System.out.print("Set first player name:");}
+        else{
+            System.out.print("Set second player name:");
+        }
+        Scanner sc = new Scanner(System.in);
+        return sc.next();
+    }
 
+    public static void startMultiplayer() {
+        String player1=setPlayerNames(1);
+        String player2=setPlayerNames(2);
+        String wrongTries = "";
+        int score = 0;
+        Scanner sc = new Scanner(System.in);
+        String[] cityList = {"BLAGOEVGRAD", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO", "DOBRICH", "LOVECH", "MONTANA", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV", "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
+        Random rnd = new Random();
+        int cityIndex = rnd.nextInt(cityList.length);
+        String city = cityList[cityIndex];
+        String[] letters = city.split("(?!^)");
+        String[] cityToGuess = new String[city.length()];
+        printCurrentHangman(score,wrongTries);
+        System.out.println("\nGuess the city!");
+        for (int i = 0; i < cityToGuess.length; i++) {
+            if (letters[i].equals(" ")) {
+                cityToGuess[i] = " ";
+            } else {
+                cityToGuess[i] = "_";
+            }
+        }
+        String player = player1;
+        while (emptySpaces(cityToGuess)) {
+            for (int i = 0; i < cityToGuess.length; i++) {
+                System.out.print(cityToGuess[i] + " ");
+            }
+            System.out.print("\n"+player+"'s turn:");
+            String letter = sc.next().toUpperCase();
+            boolean guess = false;
+            for (int i = 0; i < letters.length; i++) {
+                if (letter.equals(letters[i])) {
+                    cityToGuess[i] = letter;
+                    guess = true;
+                }
+            }
+            if (guess == false) {
+                player=player2;
+                wrongTries+=letter+", ";
+                score++;
+                printCurrentHangman(score,wrongTries);
+            }
+            if(score==6){
+                gameOver(city);
+                break;
+            }
+        }
+        if(!emptySpaces(cityToGuess)){
+            gameForTwoWin(cityToGuess, city, player);}
     }
 
     public static void main(String[] args) {
