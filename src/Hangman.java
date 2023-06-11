@@ -241,6 +241,7 @@ public class Hangman {
             }
         }
         if(!emptySpaces(cityToGuess)){
+
             gameForTwoWin(cityToGuess, city, player);}
     }
 
