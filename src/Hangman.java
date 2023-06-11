@@ -18,7 +18,7 @@ public class Hangman {
             case 1:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |");
                 System.out.println(" |");
                 System.out.println("_|___");
@@ -26,7 +26,7 @@ public class Hangman {
             case 2:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |      |");
                 System.out.println(" |");
                 System.out.println("_|___");
@@ -34,7 +34,7 @@ public class Hangman {
             case 3:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |     /|");
                 System.out.println(" |");
                 System.out.println("_|___");
@@ -42,7 +42,7 @@ public class Hangman {
             case 4:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |     /|\\");
                 System.out.println(" |");
                 System.out.println("_|___");
@@ -50,7 +50,7 @@ public class Hangman {
             case 5:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |     /|\\");
                 System.out.println(" |     /");
                 System.out.println("_|___");
@@ -58,7 +58,7 @@ public class Hangman {
             case 6:
                 System.out.println(" ________");
                 System.out.println(" |      |");
-                System.out.println(" |      O       Wrong tries:"+wrongTries);
+                System.out.println(" |      O       Wrong tries:" + wrongTries);
                 System.out.println(" |     /|\\");
                 System.out.println(" |     / \\");
                 System.out.println("_|___");
@@ -67,7 +67,6 @@ public class Hangman {
     }
 
     public static void playHangMan() {
-        System.out.println("\t\tWelcome to the Hangman Game!");
         System.out.print("Enter GameMode (1-Single player, 2-Multiplayer):");
         Scanner sc = new Scanner(System.in);
         byte playersCount = sc.nextByte();
@@ -90,7 +89,7 @@ public class Hangman {
         if (mode == 1) {
             startSinglePlayer();
         } else {
-            startMultiplayer();
+            startMultiplayer(0, "", "");
         }
     }
 
@@ -104,38 +103,58 @@ public class Hangman {
         return emptySpaces;
     }
 
-    public static void gameOver(String city){
-        System.out.println("\t\tGame over!");
-        System.out.println("The correct answer was "+city);
+
+    public static void playAgain() {
+        System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
+        Scanner sc = new Scanner(System.in);
+        if (sc.nextInt() == 1) {
+            playHangMan();
+        } else {
+            System.out.println("Goodbye!");
+        }
     }
 
-    public static void gameWin(String[] cityToGuess, String city){
-        for(int i=0;i<cityToGuess.length;i++){
-            System.out.print(cityToGuess[i]+" ");
-        }
-        System.out.println("\n\t\t*** YOU WIN *** ");
-        System.out.println(city+" is the correct answer!");
+    public static void playAgainForTwo(String player1, String player2) {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
         Scanner sc = new Scanner(System.in);
-        if(sc.nextInt()==1){
-            playHangMan();
+        if (sc.nextInt() == 1) {
+            startMultiplayer(1, player1, player2);
         } else {
+
+            ////////////POINTS HERE
+
             System.out.println("Goodbye!");
         }
     }
-    public static void gameForTwoWin(String[] cityToGuess, String city, String winner){
-        for(int i=0;i<cityToGuess.length;i++){
-            System.out.print(cityToGuess[i]+" ");
-        }
-        System.out.println("\n\t\t*** "+winner+" WON *** ");
-        System.out.println(city+" is the correct answer!");
-        System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
-        Scanner sc = new Scanner(System.in);
-        if(sc.nextInt()==1){
-            playHangMan();
+
+    public static void gameOver(String city, String player1, String player2, String player) {
+        System.out.println("\t\tGame over!");
+        System.out.println("\t\tThe correct answer was " + city);
+        if (player != "") {
+            playAgainForTwo(player1, player2);
         } else {
-            System.out.println("Goodbye!");
+            playAgain();
         }
+    }
+
+    public static void gameWin(String[] cityToGuess, String city, String winner, String player1, String player2) {
+        for (int i = 0; i < cityToGuess.length; i++) {
+            System.out.print(cityToGuess[i] + " ");
+        }
+        if (winner == "") {
+            System.out.println("\n\t\t*** YOU WIN *** ");
+            System.out.println(city + " is the correct answer!");
+        } else {
+            System.out.println("\n\t\t*** " + winner + " WON *** ");
+            System.out.println(city + " is the correct answer!");
+            if(winner==player1){
+                //method1
+            }
+            if(winner==player2){
+                //method2
+            }
+        }
+        playAgain();
     }
 
     public static void startSinglePlayer() {
@@ -148,7 +167,7 @@ public class Hangman {
         String city = cityList[cityIndex];
         String[] letters = city.split("(?!^)");
         String[] cityToGuess = new String[city.length()];
-        printCurrentHangman(score,wrongTries);
+        printCurrentHangman(score, wrongTries);
         System.out.println("\nGuess the city!");
         for (int i = 0; i < cityToGuess.length; i++) {
             if (letters[i].equals(" ")) {
@@ -171,32 +190,37 @@ public class Hangman {
                 }
             }
             if (guess == false) {
-                wrongTries+=letter+", ";
+                wrongTries += letter + ", ";
                 score++;
-                printCurrentHangman(score,wrongTries);
-                }
-            if(score==6){
-                gameOver(city);
+                printCurrentHangman(score, wrongTries);
+            }
+            if (score == 6) {
+                gameOver(city, "", "", "");
                 break;
             }
         }
-        if(!emptySpaces(cityToGuess)){
-        gameWin(cityToGuess, city);}
+        if (!emptySpaces(cityToGuess)) {
+            gameWin(cityToGuess, city, "");
+        }
     }
 
-    public static String setPlayerNames(int num){
-        if(num==1){
-        System.out.print("Set first player name:");}
-        else{
+    public static String setPlayerNames(int num) {
+        if (num == 1) {
+            System.out.print("Set first player name:");
+        } else {
             System.out.print("Set second player name:");
         }
         Scanner sc = new Scanner(System.in);
         return sc.next();
     }
 
-    public static void startMultiplayer() {
-        String player1=setPlayerNames(1);
-        String player2=setPlayerNames(2);
+    public static void startMultiplayer(int tries, String playerFirst, String playerSecond) {
+        String player1 = playerFirst;
+        String player2 = playerSecond;
+        if (tries == 0 && playerFirst.equals("") && playerSecond.equals("")) {
+            player1 = setPlayerNames(1);
+            player2 = setPlayerNames(2);
+        }
         String wrongTries = "";
         int score = 0;
         Scanner sc = new Scanner(System.in);
@@ -206,7 +230,7 @@ public class Hangman {
         String city = cityList[cityIndex];
         String[] letters = city.split("(?!^)");
         String[] cityToGuess = new String[city.length()];
-        printCurrentHangman(score,wrongTries);
+        printCurrentHangman(score, wrongTries);
         System.out.println("\nGuess the city!");
         for (int i = 0; i < cityToGuess.length; i++) {
             if (letters[i].equals(" ")) {
@@ -220,7 +244,7 @@ public class Hangman {
             for (int i = 0; i < cityToGuess.length; i++) {
                 System.out.print(cityToGuess[i] + " ");
             }
-            System.out.print("\n"+player+"'s turn:");
+            System.out.print("\n" + player + "'s turn:");
             String letter = sc.next().toUpperCase();
             boolean guess = false;
             for (int i = 0; i < letters.length; i++) {
@@ -230,22 +254,27 @@ public class Hangman {
                 }
             }
             if (guess == false) {
-                player=player2;
-                wrongTries+=letter+", ";
+                if (player == player2) {
+                    player = player1;
+                } else {
+                    player = player2;
+                }
+                wrongTries += letter + ", ";
                 score++;
-                printCurrentHangman(score,wrongTries);
+                printCurrentHangman(score, wrongTries);
+
             }
-            if(score==6){
-                gameOver(city);
+            if (score == 6) {
+                gameOver(city, player1, player2, player);
                 break;
             }
         }
-        if(!emptySpaces(cityToGuess)){
-
-            gameForTwoWin(cityToGuess, city, player);}
+        if (!emptySpaces(cityToGuess)) {
+            gameWin(cityToGuess, city, player, player1, player2);
+        }
     }
-
     public static void main(String[] args) {
+        System.out.println("\t\tWelcome to the Hangman Game!");
         playHangMan();
     }
 }
