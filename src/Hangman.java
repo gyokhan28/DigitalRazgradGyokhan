@@ -4,7 +4,19 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Hangman {
+    public static int pointsPlayerOne, pointsPlayerTwo;
+    public static void addPoints(String winner, String player1, String player2){
+        if (winner.equals(player1)){
+            pointsPlayerOne++;
+        } else {
+            pointsPlayerTwo++;
+        }
+    }
 
+    public static void printPoints(String player1, String player2){
+        System.out.println(player1+"'s points:"+pointsPlayerOne);
+        System.out.println(player2+"'s points:"+pointsPlayerTwo);
+    }
     public static void printCurrentHangman(int score, String wrongTries) {
         switch (score) {
             case 0:
@@ -103,7 +115,6 @@ public class Hangman {
         return emptySpaces;
     }
 
-
     public static void playAgain() {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No):");
         Scanner sc = new Scanner(System.in);
@@ -120,9 +131,7 @@ public class Hangman {
         if (sc.nextInt() == 1) {
             startMultiplayer(1, player1, player2);
         } else {
-
-            ////////////POINTS HERE
-
+            printPoints(player1,player2);
             System.out.println("Goodbye!");
         }
     }
@@ -147,14 +156,14 @@ public class Hangman {
         } else {
             System.out.println("\n\t\t*** " + winner + " WON *** ");
             System.out.println(city + " is the correct answer!");
-            if(winner==player1){
-                //method1
-            }
-            if(winner==player2){
-                //method2
-            }
+            System.out.println(winner+" won this round and earned a point!");
+            addPoints(winner,player1,player2);
         }
-        playAgain();
+        if (winner != "") {
+            playAgainForTwo(player1, player2);
+        } else {
+            playAgain();
+        }
     }
 
     public static void startSinglePlayer() {
@@ -200,7 +209,7 @@ public class Hangman {
             }
         }
         if (!emptySpaces(cityToGuess)) {
-            gameWin(cityToGuess, city, "");
+            gameWin(cityToGuess, city, "", "", "");
         }
     }
 
@@ -217,7 +226,7 @@ public class Hangman {
     public static void startMultiplayer(int tries, String playerFirst, String playerSecond) {
         String player1 = playerFirst;
         String player2 = playerSecond;
-        if (tries == 0 && playerFirst.equals("") && playerSecond.equals("")) {
+        if (tries == 0) {
             player1 = setPlayerNames(1);
             player2 = setPlayerNames(2);
         }
