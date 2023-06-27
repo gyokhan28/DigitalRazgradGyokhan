@@ -232,7 +232,12 @@ public class Hangman {
     public static boolean checkEnteredLetter(String letter, String[] letters, String[] cityToGuess) {
         boolean guess = false;
         for (int i = 0; i < letters.length; i++) {
-            if (letter.equals(letters[i])) {
+            if (cityToGuess[i].contains(letter)){
+                System.out.println("All "+letter+"'s are already placed. Try again!");
+                guess = true;
+                break;
+            }
+            if (letter.equals(letters[i]) && !cityToGuess[i].contains(letter)) {
                 cityToGuess[i] = letter;
                 guess = true;
             }
