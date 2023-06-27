@@ -121,32 +121,41 @@ public class Hangman {
     public static void playAgain() {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
-        switch (sc.nextInt()) {
-            case 1 -> {
+        String choice = sc.next();
+        while(!choice.equals("1")&&!choice.equals("2")&&!choice.equals("3")) {
+            System.out.print("Wrong input. Try again:");
+            choice = sc.next();
+        }
+        switch (choice) {
+            case "1" -> {
                 startSinglePlayer();
             }
-            case 2 -> {
+            case "2" -> {
                 System.out.println("Goodbye!");
             }
-            case 3 -> {
+            case "3" -> {
                 gameModeInput();
             }
-            default -> System.out.println("Wrong input!");
         }
     }
 
     public static void playAgainForTwo(String player1, String player2) {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
-        switch (sc.nextInt()) {
-            case 1 -> {
+        String choice = sc.next();
+        while(!choice.equals("1")&&!choice.equals("2")&&!choice.equals("3")) {
+            System.out.print("Wrong input. Try again:");
+            choice = sc.next();
+        }
+        switch (choice) {
+            case "1" -> {
                 startMultiplayer(1, player1, player2);
             }
-            case 2 -> {
+            case "2" -> {
                 printPoints(player1, player2);
                 System.out.println("Goodbye!");
             }
-            case 3 -> {
+            case "3" -> {
                 gameModeInput();
             }
         }
