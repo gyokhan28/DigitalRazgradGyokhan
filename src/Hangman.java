@@ -7,7 +7,9 @@ public class Hangman {
     public static int pointsPlayerOne, pointsPlayerTwo;
 
     public static String generateRandomCity() {
-        String[] cityList = {"BLAGOEVGRAD", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO", "DOBRICH", "LOVECH", "MONTANA", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV", "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
+        String[] cityList = {"AYTOS", "ASENOVGRAD", "AHTOPOL", "BLAGOEVGRAD", "BALCHIK", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO",
+                "GORNA ORYAHOVICA", "GOCE DELCHEV", "DOBRICH", "DIMITROVGRAD", "LOVECH", "MONTANA", "NESEBUR", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV",
+                "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "SVETI VLAS", "KUBRAT", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
         Random rnd = new Random();
         int cityIndex = rnd.nextInt(cityList.length);
         return cityList[cityIndex];
@@ -22,8 +24,9 @@ public class Hangman {
     }
 
     public static void printPoints(String player1, String player2) {
-        System.out.println(player1 + "'s points:" + pointsPlayerOne);
-        System.out.println(player2 + "'s points:" + pointsPlayerTwo);
+        System.out.println("Points:");
+        System.out.println(player1+" -> "+pointsPlayerOne);
+        System.out.println(player2+" -> "+pointsPlayerTwo);
     }
 
     public static void printCurrentHangman(int score, String wrongGuesses) {
@@ -162,9 +165,10 @@ public class Hangman {
     }
 
     public static void gameOver(String city, String player1, String player2, String player) {
-        System.out.println("\t\tGame over!");
+        System.out.println("\t\t\t\tGame over!");
         System.out.println("\t\tThe correct answer was " + city);
         if (player != "") {
+            System.out.println("\t\t\tNobody won this round!");
             playAgainForTwo(player1, player2);
         } else {
             playAgain();
