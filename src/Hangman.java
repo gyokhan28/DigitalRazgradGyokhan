@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Hangman {
+    //TODO:The variables pointsPlayerOne and pointsPlayerTwo will store the points scored by the players.
     public static int pointsPlayerOne, pointsPlayerTwo;
 
     public static String generateRandomCity() {
@@ -25,8 +26,8 @@ public class Hangman {
 
     public static void printPoints(String player1, String player2) {
         System.out.println("Points:");
-        System.out.println(player1+" -> "+pointsPlayerOne);
-        System.out.println(player2+" -> "+pointsPlayerTwo);
+        System.out.println(player1 + " -> " + pointsPlayerOne);
+        System.out.println(player2 + " -> " + pointsPlayerTwo);
     }
 
     public static void printCurrentHangman(int score, String wrongGuesses) {
@@ -113,19 +114,20 @@ public class Hangman {
 
     public static boolean checkForEmptySpaces(String[] cityToGuess) {
         boolean emptySpaces = false;
-        for (int i = 0; i < cityToGuess.length; i++) {
-            if (cityToGuess[i].equals("_")) {
+        for (String s : cityToGuess) {
+            if (s.equals("_")) {
                 emptySpaces = true;
+                break;
             }
         }
         return emptySpaces;
     }
 
-    public static void playAgain() {
+    public static void playAgainSingleplayer() {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
-        while(!choice.equals("1")&&!choice.equals("2")&&!choice.equals("3")) {
+        while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3")) {
             System.out.print("Wrong input. Try again:");
             choice = sc.next();
         }
@@ -142,11 +144,11 @@ public class Hangman {
         }
     }
 
-    public static void playAgainForTwo(String player1, String player2) {
+    public static void playAgainMultiplayer(String player1, String player2) {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
-        while(!choice.equals("1")&&!choice.equals("2")&&!choice.equals("3")) {
+        while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3")) {
             System.out.print("Wrong input. Try again:");
             choice = sc.next();
         }
@@ -164,35 +166,20 @@ public class Hangman {
         }
     }
 
-    public static void gameOver(String city, String player1, String player2, String player) {
+    public static void gameOver(String city) {
         System.out.println("\t\t\t\tGame over!");
         System.out.println("\t\tThe correct answer was " + city);
-        if (player != "") {
-            System.out.println("\t\t\tNobody won this round!");
-            playAgainForTwo(player1, player2);
-        } else {
-            playAgain();
-        }
     }
 
-    public static void gameWin(String[] cityToGuess, String city, String winner, String player1, String player2) {
-        for (int i = 0; i < cityToGuess.length; i++) {
-            System.out.print(cityToGuess[i] + " ");
-        }
-        if (winner == "") {
-            System.out.println("\n\t\t*** YOU WIN *** ");
-            System.out.println(city + " is the correct answer!");
-        } else {
-            System.out.println("\n\t\t*** " + winner + " WON *** ");
-            System.out.println(city + " is the correct answer!");
-            System.out.println(winner + " won this round and earned a point!");
-            addPoints(winner, player1);
-        }
-        if (winner != "") {
-            playAgainForTwo(player1, player2);
-        } else {
-            playAgain();
-        }
+    public static void multiplayerWinMessagePrint(String city, String winner) {
+        System.out.println("\n\t\t*** " + winner + " WON *** ");
+        System.out.println(city + " is the correct answer!");
+        System.out.println(winner + " won this round and earned a point!");
+    }
+
+    public static void singleplayerWinMessagePrint(String city) {
+        System.out.println("\n\t\t*** YOU WIN *** ");
+        System.out.println(city + " is the correct answer!");
     }
 
     public static boolean checkFormat(String userGuess) {
@@ -245,8 +232,8 @@ public class Hangman {
     public static boolean checkEnteredLetter(String letter, String[] letters, String[] cityToGuess) {
         boolean guess = false;
         for (int i = 0; i < letters.length; i++) {
-            if (cityToGuess[i].contains(letter)){
-                System.out.println("All "+letter+"'s are already placed. Try again!");
+            if (cityToGuess[i].contains(letter)) {
+                System.out.println("All " + letter + "'s are already placed. Try again!");
                 guess = true;
                 break;
             }
@@ -278,18 +265,21 @@ public class Hangman {
             boolean guess = checkEnteredLetter(userGuessedLetter, letters, cityToGuess);
             if (wrongGuesses.contains(userGuessedLetter)) {
                 System.out.print(userGuessedLetter + " is already marked as wrong. Try again!\n");
-            } else if(!guess) {
+            } else if (!guess) {
                 wrongGuesses += userGuessedLetter + ", ";
                 score++;
                 printCurrentHangman(score, wrongGuesses);
             }
             if (score == 6) {
-                gameOver(city, "", "", "");
+                gameOver(city);
+                playAgainSingleplayer();
                 break;
             }
         }
         if (!checkForEmptySpaces(cityToGuess)) {
-            gameWin(cityToGuess, city, "", "", "");
+            printHiddenWord(cityToGuess);
+            singleplayerWinMessagePrint(city);
+            playAgainSingleplayer();
         }
     }
 
@@ -326,12 +316,15 @@ public class Hangman {
                 printCurrentHangman(score, wrongGuesses);
             }
             if (score == 6) {
-                gameOver(city, player1, player2, currentPlayer);
-                break;
+                gameOver(city);
+                playAgainMultiplayer(player1, player2);
             }
         }
         if (!checkForEmptySpaces(cityToGuess)) {
-            gameWin(cityToGuess, city, currentPlayer, player1, player2);
+            printHiddenWord(cityToGuess);
+            multiplayerWinMessagePrint(city, currentPlayer);
+            addPoints(currentPlayer, player1);
+            playAgainMultiplayer(player1, player2);
         }
     }
 
