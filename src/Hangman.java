@@ -30,8 +30,8 @@ public class Hangman {
         System.out.println(player2 + " -> " + pointsPlayerTwo);
     }
 
-    public static void printCurrentHangman(int score, String wrongGuesses) {
-        switch (score) {
+    public static void printCurrentHangman(int wrongGuessesCount, String wrongGuesses) {
+        switch (wrongGuessesCount) {
             case 0 -> {
                 System.out.println(" ________");
                 System.out.println(" |      |");
@@ -136,7 +136,7 @@ public class Hangman {
                 startSinglePlayer();
             }
             case "2" -> {
-                System.out.println("Goodbye!");
+                System.out.print("Goodbye!");
             }
             case "3" -> {
                 gameModeInput();
@@ -158,9 +158,11 @@ public class Hangman {
             }
             case "2" -> {
                 printPoints(player1, player2);
-                System.out.println("Goodbye!");
+                System.out.print("Goodbye!");
             }
             case "3" -> {
+                pointsPlayerOne = 0;
+                pointsPlayerTwo = 0;
                 gameModeInput();
             }
         }
@@ -170,6 +172,7 @@ public class Hangman {
         System.out.println("\t\t\t\tGame over!");
         System.out.println("\t\tThe correct answer was " + city);
     }
+
 
     public static void multiplayerWinMessagePrint(String city, String winner) {
         System.out.println("\n\t\t*** " + winner + " WON *** ");
@@ -194,7 +197,7 @@ public class Hangman {
         return wrongFormat;
     }
 
-    public static String setPlayerNames(int num) {
+    public static String setName(int num) {
         if (num == 1) {
             System.out.print("Set first player name:");
         } else {
@@ -247,14 +250,14 @@ public class Hangman {
 
     public static void startSinglePlayer() {
         String wrongGuesses = "";
-        int score = 0;
+        int wrongGuessesCount = 0;
         String city = generateRandomCity();
         String[] letters = city.split("(?!^)");
         String[] cityToGuess = new String[city.length()];
-        printCurrentHangman(score, wrongGuesses);
+        printCurrentHangman(wrongGuessesCount, wrongGuesses);
         System.out.println("\nGuess the city!");
         generateHiddenWord(cityToGuess, letters);
-        while (checkForEmptySpaces(cityToGuess)) {
+        while (checkForEmptySpaces(cityToGuess) && wrongGuessesCount<6) {
             printHiddenWord(cityToGuess);
             System.out.print("\nEnter your guess:");
             Scanner sc = new Scanner(System.in);
@@ -267,16 +270,16 @@ public class Hangman {
                 System.out.print(userGuessedLetter + " is already marked as wrong. Try again!\n");
             } else if (!guess) {
                 wrongGuesses += userGuessedLetter + ", ";
-                score++;
-                printCurrentHangman(score, wrongGuesses);
+                wrongGuessesCount++;
+                printCurrentHangman(wrongGuessesCount, wrongGuesses);
             }
-            if (score == 6) {
+            if (wrongGuessesCount == 6) {
                 gameOver(city);
                 playAgainSingleplayer();
                 break;
             }
         }
-        if (!checkForEmptySpaces(cityToGuess)) {
+        if (!checkForEmptySpaces(cityToGuess) && wrongGuessesCount<6) {
             printHiddenWord(cityToGuess);
             singleplayerWinMessagePrint(city);
             playAgainSingleplayer();
@@ -286,19 +289,19 @@ public class Hangman {
     public static void startMultiplayer(int tries, String playerFirst, String playerSecond) {
         String player1 = playerFirst, player2 = playerSecond;
         if (tries == 0) {
-            player1 = setPlayerNames(1);
-            player2 = setPlayerNames(2);
+            player1 = setName(1);
+            player2 = setName(2);
         }
         String wrongGuesses = "";
-        int score = 0;
-        Scanner sc = new Scanner(System.in);
+        int wrongGuessesCount = 0;
         String city = generateRandomCity();
         String[] letters = city.split("(?!^)");
         String[] cityToGuess = new String[city.length()];
-        printCurrentHangman(score, wrongGuesses);
-        System.out.println("\nGuess the city!");
+        printCurrentHangman(wrongGuessesCount, wrongGuesses);
         generateHiddenWord(cityToGuess, letters);
         String currentPlayer = player1;
+        System.out.println("\nGuess the city!");
+        Scanner sc = new Scanner(System.in);
         while (checkForEmptySpaces(cityToGuess)) {
             printHiddenWord(cityToGuess);
             System.out.print("\n" + currentPlayer + "'s turn:");
@@ -312,12 +315,13 @@ public class Hangman {
             } else if (!guess) {
                 currentPlayer = changeCurrentPlayer(currentPlayer, player1, player2);
                 wrongGuesses += userGuessedLetter + ", ";
-                score++;
-                printCurrentHangman(score, wrongGuesses);
+                wrongGuessesCount++;
+                printCurrentHangman(wrongGuessesCount, wrongGuesses);
             }
-            if (score == 6) {
+            if (wrongGuessesCount == 6) {
                 gameOver(city);
                 playAgainMultiplayer(player1, player2);
+                break;
             }
         }
         if (!checkForEmptySpaces(cityToGuess)) {
