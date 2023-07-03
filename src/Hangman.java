@@ -1,5 +1,8 @@
 package src;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -7,10 +10,19 @@ public class Hangman {
     //TODO:The variables pointsPlayerOne and pointsPlayerTwo will store the points scored by the players.
     public static int pointsPlayerOne, pointsPlayerTwo;
 
-    public static String generateRandomCity() {
-        String[] cityList = {"AYTOS", "ASENOVGRAD", "AHTOPOL", "BLAGOEVGRAD", "BALCHIK", "BURGAS", "VARNA", "VELIKO TURNOVO", "VIDIN", "VRACA", "GABROVO",
-                "GORNA ORYAHOVICA", "GOCE DELCHEV", "DOBRICH", "DIMITROVGRAD", "LOVECH", "MONTANA", "NESEBUR", "PAZARDJIK", "PERNIK", "PLEVEN", "PLOVDIV",
-                "RAZGRAD", "RUSE", "SILISTRA", "SLIVEN", "SOFIA", "STARA ZAGORA", "SVETI VLAS", "KUBRAT", "TURGOVISHTE", "HASKOVO", "SHUMEN", "YAMBOL"};
+    public static String generateRandomCity() throws FileNotFoundException {
+        BufferedReader reader = new BufferedReader(new FileReader("cityList.txt"));
+        String line = "";
+        String allCities = "";
+        try{
+            while((line=reader.readLine())!=null){
+                allCities+=line;
+                allCities+=";";
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        String[] cityList = allCities.split(";");
         Random rnd = new Random();
         int cityIndex = rnd.nextInt(cityList.length);
         return cityList[cityIndex];
@@ -91,7 +103,7 @@ public class Hangman {
         }
     }
 
-    public static void gameModeInput() {
+    public static void gameModeInput() throws FileNotFoundException {
         System.out.print("Enter GameMode (1-Single player, 2-Multiplayer):");
         Scanner sc = new Scanner(System.in);
         String playersCount = sc.next();
@@ -102,7 +114,7 @@ public class Hangman {
         printWelcomeMessage(Integer.parseInt(playersCount));
     }
 
-    public static void printWelcomeMessage(int playersCount) {
+    public static void printWelcomeMessage(int playersCount) throws FileNotFoundException {
         if (playersCount == 1) {
             System.out.println("Single player mode selected!");
             startSinglePlayer();
@@ -123,7 +135,7 @@ public class Hangman {
         return emptySpaces;
     }
 
-    public static void playAgainSingleplayer() {
+    public static void playAgainSingleplayer() throws FileNotFoundException {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
@@ -144,7 +156,7 @@ public class Hangman {
         }
     }
 
-    public static void playAgainMultiplayer(String player1, String player2) {
+    public static void playAgainMultiplayer(String player1, String player2) throws FileNotFoundException {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
@@ -248,7 +260,7 @@ public class Hangman {
         return guess;
     }
 
-    public static void startSinglePlayer() {
+    public static void startSinglePlayer() throws FileNotFoundException {
         String wrongGuesses = "";
         int wrongGuessesCount = 0;
         String city = generateRandomCity();
@@ -286,7 +298,7 @@ public class Hangman {
         }
     }
 
-    public static void startMultiplayer(int tries, String playerFirst, String playerSecond) {
+    public static void startMultiplayer(int tries, String playerFirst, String playerSecond) throws FileNotFoundException {
         String player1 = playerFirst, player2 = playerSecond;
         if (tries == 0) {
             player1 = setName(1);
@@ -332,7 +344,7 @@ public class Hangman {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         System.out.println("\t\tWelcome to the Hangman Game!");
         gameModeInput();
     }
