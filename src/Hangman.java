@@ -1,7 +1,6 @@
 package src;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Random;
 import java.util.Scanner;
@@ -10,16 +9,16 @@ public class Hangman {
     //TODO:The variables pointsPlayerOne and pointsPlayerTwo will store the points scored by the players.
     public static int pointsPlayerOne, pointsPlayerTwo;
 
-    public static String generateRandomCity() throws FileNotFoundException {
-        BufferedReader reader = new BufferedReader(new FileReader("cityList.txt"));
-        String line = "";
+    public static String generateRandomCity() {
         String allCities = "";
-        try{
-            while((line=reader.readLine())!=null){
-                allCities+=line;
-                allCities+=";";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("cityList.txt"));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                allCities += line;
+                allCities += ";";
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         String[] cityList = allCities.split(";");
@@ -103,7 +102,7 @@ public class Hangman {
         }
     }
 
-    public static void gameModeInput() throws FileNotFoundException {
+    public static void gameModeInput() {
         System.out.print("Enter GameMode (1-Single player, 2-Multiplayer):");
         Scanner sc = new Scanner(System.in);
         String playersCount = sc.next();
@@ -114,7 +113,7 @@ public class Hangman {
         printWelcomeMessage(Integer.parseInt(playersCount));
     }
 
-    public static void printWelcomeMessage(int playersCount) throws FileNotFoundException {
+    public static void printWelcomeMessage(int playersCount) {
         if (playersCount == 1) {
             System.out.println("Single player mode selected!");
             startSinglePlayer();
@@ -135,7 +134,7 @@ public class Hangman {
         return emptySpaces;
     }
 
-    public static void playAgainSingleplayer() throws FileNotFoundException {
+    public static void playAgainSingleplayer() {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
@@ -156,7 +155,7 @@ public class Hangman {
         }
     }
 
-    public static void playAgainMultiplayer(String player1, String player2) throws FileNotFoundException {
+    public static void playAgainMultiplayer(String player1, String player2) {
         System.out.print("\nDo you want to play again? (1-Yes, 2-No, 3-Back to main menu):");
         Scanner sc = new Scanner(System.in);
         String choice = sc.next();
@@ -260,7 +259,7 @@ public class Hangman {
         return guess;
     }
 
-    public static void startSinglePlayer() throws FileNotFoundException {
+    public static void startSinglePlayer() {
         String wrongGuesses = "";
         int wrongGuessesCount = 0;
         String city = generateRandomCity();
@@ -269,7 +268,7 @@ public class Hangman {
         printCurrentHangman(wrongGuessesCount, wrongGuesses);
         System.out.println("\nGuess the city!");
         generateHiddenWord(cityToGuess, letters);
-        while (checkForEmptySpaces(cityToGuess) && wrongGuessesCount<6) {
+        while (checkForEmptySpaces(cityToGuess) && wrongGuessesCount < 6) {
             printHiddenWord(cityToGuess);
             System.out.print("\nEnter your guess:");
             Scanner sc = new Scanner(System.in);
@@ -291,14 +290,14 @@ public class Hangman {
                 break;
             }
         }
-        if (!checkForEmptySpaces(cityToGuess) && wrongGuessesCount<6) {
+        if (!checkForEmptySpaces(cityToGuess) && wrongGuessesCount < 6) {
             printHiddenWord(cityToGuess);
             singleplayerWinMessagePrint(city);
             playAgainSingleplayer();
         }
     }
 
-    public static void startMultiplayer(int tries, String playerFirst, String playerSecond) throws FileNotFoundException {
+    public static void startMultiplayer(int tries, String playerFirst, String playerSecond) {
         String player1 = playerFirst, player2 = playerSecond;
         if (tries == 0) {
             player1 = setName(1);
@@ -344,7 +343,7 @@ public class Hangman {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         System.out.println("\t\tWelcome to the Hangman Game!");
         gameModeInput();
     }
