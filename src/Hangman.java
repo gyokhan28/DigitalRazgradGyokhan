@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Hangman {
-    //TODO:The variables pointsPlayerOne and pointsPlayerTwo will store the points scored by the players.
+
     public static int pointsPlayerOne, pointsPlayerTwo;
 
     public static String generateRandomCity() {
@@ -113,8 +113,8 @@ public class Hangman {
         printWelcomeMessage(Integer.parseInt(playersCount));
     }
 
-    public static void printWelcomeMessage(int playersCount) {
-        if (playersCount == 1) {
+    public static void printWelcomeMessage(int gameMode) {
+        if (gameMode == 1) {
             System.out.println("Single player mode selected!");
             startSinglePlayer();
         } else {
@@ -174,6 +174,7 @@ public class Hangman {
             case "3" -> {
                 pointsPlayerOne = 0;
                 pointsPlayerTwo = 0;
+                System.out.println("Players' points are reset!");
                 gameModeInput();
             }
         }
@@ -183,7 +184,6 @@ public class Hangman {
         System.out.println("\t\t\t\tGame over!");
         System.out.println("\t\tThe correct answer was " + city);
     }
-
 
     public static void multiplayerWinMessagePrint(String city, String winner) {
         System.out.println("\n\t\t*** " + winner + " WON *** ");
