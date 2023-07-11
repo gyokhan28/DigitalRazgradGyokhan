@@ -13,7 +13,7 @@ public class Hangman {
         String allCities = "";
         try {
             BufferedReader reader = new BufferedReader(new FileReader("cityList.txt"));
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 allCities += line;
                 allCities += ";";
@@ -235,7 +235,7 @@ public class Hangman {
     }
 
     public static String changeCurrentPlayer(String currentPlayer, String player1, String player2) {
-        if (currentPlayer == player2) {
+        if (currentPlayer.equals(player2)){
             currentPlayer = player1;
         } else {
             currentPlayer = player2;
